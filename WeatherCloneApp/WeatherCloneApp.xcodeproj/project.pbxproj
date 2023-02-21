@@ -21,6 +21,7 @@
 		66C7657629A442C100EED540 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 66C7657529A442C100EED540 /* RxRelay */; };
 		66C7657829A442C100EED540 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 66C7657729A442C100EED540 /* RxSwift */; };
 		66C7657B29A4430000EED540 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 66C7657A29A4430000EED540 /* Alamofire */; };
+		66E6AE9F29A450D100B094C0 /* BundelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E6AE9E29A450D100B094C0 /* BundelExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		668957F929A4418E000ADA91 /* WeatherCloneAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherCloneAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		668957FD29A4418E000ADA91 /* WeatherCloneAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCloneAppUITests.swift; sourceTree = "<group>"; };
 		668957FF29A4418E000ADA91 /* WeatherCloneAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCloneAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		66E6AE9E29A450D100B094C0 /* BundelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundelExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 			children = (
 				66E6AE9329A44B9A00B094C0 /* AppSetting */,
 				668957E029A4418C000ADA91 /* ViewController.swift */,
+				66E6AE9D29A450B400B094C0 /* Extensions */,
 				668957E229A4418C000ADA91 /* Main.storyboard */,
 				668957E529A4418D000ADA91 /* Assets.xcassets */,
 				668957E729A4418D000ADA91 /* LaunchScreen.storyboard */,
@@ -340,6 +343,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66E6AE9F29A450D100B094C0 /* BundelExtension.swift in Sources */,
 				668957E129A4418C000ADA91 /* ViewController.swift in Sources */,
 				668957DD29A4418C000ADA91 /* AppDelegate.swift in Sources */,
 				668957DF29A4418C000ADA91 /* SceneDelegate.swift in Sources */,
