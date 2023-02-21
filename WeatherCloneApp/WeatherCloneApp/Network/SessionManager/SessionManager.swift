@@ -28,7 +28,6 @@ class SessionManager: Request {
                 method: apiType.method,
                 parameters: apiType.params
             ).responseData { result in
-                print(result.request)
                 switch result.result {
                 case .success(let data):
                     do {
