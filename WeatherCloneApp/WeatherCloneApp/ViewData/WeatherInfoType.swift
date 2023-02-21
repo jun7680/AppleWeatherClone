@@ -7,6 +7,18 @@
 
 import Foundation
 
-enum WeatherInfoType {
-    case header(header: HeaderViewData)
+enum WeatherInfoType: Int {
+    static let numberOfSection = 4
+    
+    case hourly
+    case weekend
+    case location
+    case detail
+    
+    init?(index: Int) {
+        guard let type = WeatherInfoType(rawValue: index) else { return nil }
+        
+        self = type
+    }
+    
 }
