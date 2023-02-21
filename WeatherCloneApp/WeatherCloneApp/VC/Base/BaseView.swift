@@ -1,5 +1,5 @@
 //
-//  BaseTableViewCell.swift
+//  BaseView.swift
 //  WeatherCloneApp
 //
 //  Created by 옥인준 on 2023/02/21.
@@ -7,11 +7,13 @@
 
 import UIKit
 
-class BaseTableViewCell: UITableViewCell {
+class BaseView: UIView {
+
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
+        setup()
         addViews()
         initConstraints()
     }
@@ -20,7 +22,7 @@ class BaseTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func initConstraints() {}
+    func setup() {}
     func addViews() {}
-
+    func initConstraints() {}
 }
