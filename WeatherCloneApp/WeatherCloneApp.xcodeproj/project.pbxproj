@@ -109,8 +109,7 @@
 		668957DB29A4418C000ADA91 /* WeatherCloneApp */ = {
 			isa = PBXGroup;
 			children = (
-				668957DC29A4418C000ADA91 /* AppDelegate.swift */,
-				668957DE29A4418C000ADA91 /* SceneDelegate.swift */,
+				66E6AE9329A44B9A00B094C0 /* AppSetting */,
 				668957E029A4418C000ADA91 /* ViewController.swift */,
 				668957E229A4418C000ADA91 /* Main.storyboard */,
 				668957E529A4418D000ADA91 /* Assets.xcassets */,
@@ -135,6 +134,67 @@
 				668957FF29A4418E000ADA91 /* WeatherCloneAppUITestsLaunchTests.swift */,
 			);
 			path = WeatherCloneAppUITests;
+			sourceTree = "<group>";
+		};
+		66E6AE9329A44B9A00B094C0 /* AppSetting */ = {
+			isa = PBXGroup;
+			children = (
+				668957DC29A4418C000ADA91 /* AppDelegate.swift */,
+				668957DE29A4418C000ADA91 /* SceneDelegate.swift */,
+			);
+			path = AppSetting;
+			sourceTree = "<group>";
+		};
+		66E6AE9429A44BA600B094C0 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				66E6AE9629A44E3D00B094C0 /* APIType.swift */,
+				66E6AEA329A4574B00B094C0 /* Model */,
+				66E6AEA029A456F900B094C0 /* Service */,
+				66E6AE9A29A44FBE00B094C0 /* API */,
+				66E6AE9529A44E3100B094C0 /* SessionManager */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		66E6AE9529A44E3100B094C0 /* SessionManager */ = {
+			isa = PBXGroup;
+			children = (
+				66E6AE9829A44E9C00B094C0 /* SessionManager.swift */,
+			);
+			path = SessionManager;
+			sourceTree = "<group>";
+		};
+		66E6AE9A29A44FBE00B094C0 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				66E6AE9B29A44FD800B094C0 /* WeatherAPI.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		66E6AE9D29A450B400B094C0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				66E6AE9E29A450D100B094C0 /* BundelExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		66E6AEA029A456F900B094C0 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				66E6AEA129A4570B00B094C0 /* WeatherService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		66E6AEA329A4574B00B094C0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				66E6AEA429A4575A00B094C0 /* WeatherResponse.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
