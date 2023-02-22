@@ -120,6 +120,7 @@
 				66C7657B29A4430000EED540 /* Alamofire in Frameworks */,
 				66C7657629A442C100EED540 /* RxRelay in Frameworks */,
 				66C7657429A442C100EED540 /* RxCocoa in Frameworks */,
+				6672383529A657B400531CF5 /* RxDataSources in Frameworks */,
 				66C7657829A442C100EED540 /* RxSwift in Frameworks */,
 				66C7657129A442A700EED540 /* SnapKit in Frameworks */,
 			);
@@ -387,6 +388,7 @@
 				66C7657529A442C100EED540 /* RxRelay */,
 				66C7657729A442C100EED540 /* RxSwift */,
 				66C7657A29A4430000EED540 /* Alamofire */,
+				6672383429A657B400531CF5 /* RxDataSources */,
 			);
 			productName = WeatherCloneApp;
 			productReference = 668957D929A4418C000ADA91 /* WeatherCloneApp.app */;
@@ -464,6 +466,7 @@
 				66C7656F29A442A700EED540 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				66C7657229A442C100EED540 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				66C7657929A4430000EED540 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				6672383329A657B400531CF5 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			productRefGroup = 668957DA29A4418C000ADA91 /* Products */;
 			projectDirPath = "";
@@ -884,6 +887,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6672383329A657B400531CF5 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 		66C7656F29A442A700EED540 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -911,6 +922,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6672383429A657B400531CF5 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6672383329A657B400531CF5 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
+		};
 		66C7657029A442A700EED540 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 66C7656F29A442A700EED540 /* XCRemoteSwiftPackageReference "SnapKit" */;
