@@ -9,6 +9,12 @@ import UIKit
 
 class DetailInfoTableViewCell: BaseTableViewCell {
     static let identifier = "DetailInfoTableCell"
+
+    private var detailItems = [DetailDataType]() {
+        didSet {
+            detailCollectionView.reloadData()
+        }
+    }
     
     private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
       let layout = UICollectionViewFlowLayout()
@@ -25,14 +31,17 @@ class DetailInfoTableViewCell: BaseTableViewCell {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.contentInset = .zero
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .blue.withAlphaComponent(0.2)
         collectionView.clipsToBounds = true
-        collectionView.register(DetailInfoCollectionViewCell.self, forCellWithReuseIdentifier: DetailInfoCollectionViewCell.identifier)
+        collectionView.register(
+            DetailInfoCollectionViewCell.self,
+            forCellWithReuseIdentifier: DetailInfoCollectionViewCell.identifier
+        )
+        collectionView.isScrollEnabled = false
 
         return collectionView
     }()
     
-    private var detailItems = [DetailDataType]()
     
     override func setup() {
         super.setup()
@@ -54,10 +63,21 @@ class DetailInfoTableViewCell: BaseTableViewCell {
             make.edges.equalToSuperview()
         }
     }
-    
-    func configure(_ items: [DetailDataType]) {
-        detailItems = items
-        detailCollectionView.reloadData()
+}
+
+extension DetailInfoTableViewCell {
+    static func makeCell(
+        view: UITableView,
+        indexPath: IndexPath,
+        model: [DetailDataType]
+    ) -> DetailInfoTableViewCell {
+        guard let cell = view.dequeueReusableCell(
+            withIdentifier: identifier
+        ) as? DetailInfoTableViewCell else { return .init() }
+        
+        cell.detailItems = model
+        
+        return cell
     }
 }
 

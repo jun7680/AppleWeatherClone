@@ -12,20 +12,16 @@ import RxSwift
 protocol MainViewModelInput {
     func fetch(lat: Double, lon: Double)
     
-    var infoListRelay: PublishRelay<[WeatherInfoType]> { get }
-    var hourlyListRelay: PublishRelay<[HourlyViewData]> { get }
-    var weeklyListRelay: PublishRelay<[WeekendViewData]> { get }
-    var buildFinishRelay: PublishRelay<Void> { get }
-    var coordinateInput: (lat: Double, lon: Double) { get set }
+    var hourlyReadyRelay: PublishRelay<Void> { get }
+    var weeklyReadyRelay: PublishRelay<Void> { get }
+    var sections: BehaviorRelay<[WeatherSectionModel]> { get }
+    var errorRelay: PublishRelay<Void> { get }
+    
 }
 
 protocol MainViewModelOuput {
-    var infoListRelayObservable: Observable<[WeatherInfoType]> { get }
-    var hourlyListObservable: Observable<[HourlyViewData]> { get }
-    var weeklyListObservable: Observable<[WeekendViewData]> { get }
-    var buildFinishObservable: Observable<Void> { get }
-    
-    var coordinate: (lat: Double, lon: Double) { get }
+    var sectionsObservable: Observable<[WeatherSectionModel]> { get }
+    var errorObservable: Observable<Void> { get }
 }
 
 class MainViewModel: MainViewModelInput, MainViewModelOuput {
@@ -34,56 +30,116 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
     var outputs: MainViewModelOuput { return self }
     
     private let disposeBag = DisposeBag()
+    var hourlyReadyRelay = PublishRelay<Void>()
+    var weeklyReadyRelay = PublishRelay<Void>()
     
-    var infoListRelay = PublishRelay<[WeatherInfoType]>()
-    var infoListRelayObservable: Observable<[WeatherInfoType]> {
-        return infoListRelay.asObservable()
+    var coordinate: (lat: Double, lon: Double) = (36.783611, 127.004173)
+    /// tableview section
+    var sections = BehaviorRelay<[WeatherSectionModel]>(value: [])
+    var sectionsObservable: Observable<[WeatherSectionModel]> {
+        return sections.asObservable()
     }
     
-    var hourlyListRelay = PublishRelay<[HourlyViewData]>()
-    var hourlyListObservable: Observable<[HourlyViewData]> {
-        return hourlyListRelay.asObservable()
+    /// Error Relay
+    var errorRelay = PublishRelay<Void>()
+    var errorObservable: Observable<Void> {
+        return errorRelay.asObservable()
     }
     
-    var weeklyListRelay = PublishRelay<[WeekendViewData]>()
-    var weeklyListObservable: Observable<[WeekendViewData]> {
-        return weeklyListRelay.asObservable()
-    }
+    /// 3시간 단위 아이템
+    private var hourlItems: [HourlyViewData]?
     
-    var buildFinishRelay = PublishRelay<Void>()
-    var buildFinishObservable: Observable<Void> {
-        return buildFinishRelay.asObservable()
-    }
+    /// 5일간 아이템
+    private var weeklyItems: [WeekendViewData]?
     
-    var coordinateInput: (lat: Double, lon: Double) = (36.783611, 127.004173)
-    var coordinate: (lat: Double, lon: Double) {
-        return coordinateInput
-    }
-    
-    init() {
-        fetch(lat: coordinateInput.lat, lon: coordinateInput.lon)
+    /// 최신 섹션
+    private var recentSection: WeatherSectionModel? {
+        guard let recent = hourlItems?.first else { return nil }
         
-        Observable.zip(hourlyListRelay, weeklyListRelay)
-            .subscribe(with: self) { owner, items in
-                owner.buildFinishRelay.accept(())
+        return WeatherSectionModel(items: [.recent(recent)])
+    }
+    
+    /// 시간 섹션
+    private var hourlySection: WeatherSectionModel? {
+        guard let hourlItems else { return nil }
+
+        return WeatherSectionModel(items: [.hourly(hourlItems)])
+    }
+    
+    /// 5일간 섹션
+    private var weeklySection: WeatherSectionModel? {
+        guard let weeklyItems else { return nil }
+        let weekly = weeklyItems.compactMap {
+            return WeatherInfoModel.weekend($0)
+        }
+        return WeatherSectionModel(items: weekly)
+    }
+    
+    /// 위치 섹션
+    private var locationSection: WeatherSectionModel? {
+        let (lat, lon) = coordinate
+        let model = LocationViewData(lat: lat, lon: lon)
+        return WeatherSectionModel(items: [.location(model)])
+    }
+    
+    /// 디테일 섹션
+    private var detailSection: WeatherSectionModel? {
+        guard let detailItem = hourlItems?.first else { return nil }
+        let model: [DetailDataType] = [
+            .clouds(value: detailItem.clouds),
+            .humidity(value: detailItem.humidity),
+            .wind(value: detailItem.wind)
+        ]
+        
+        return WeatherSectionModel(items: [.detail(model)])
+    }
+    
+    private var weatherSections: [WeatherSectionModel] {
+        return [
+            recentSection,
+            hourlySection,
+            weeklySection,
+            locationSection,
+            detailSection
+        ].compactMap { $0 }
+    }
+    
+    // MARK: - init
+    init() {
+        bindFinishRelay()
+        fetch(lat: coordinate.lat, lon: coordinate.lon)
+    }
+    
+    // MARK: - bindFinishRelay
+    private func bindFinishRelay() {
+        Observable.zip(weeklyReadyRelay, hourlyReadyRelay)
+            .bind(with: self) { owner, _ in
+                owner.sections.accept(owner.weatherSections)
             }.disposed(by: disposeBag)
     }
     
     func fetch(lat: Double, lon: Double) {
-        coordinateInput = (lat, lon)
+        coordinate = (lat, lon)
         
         WeatherService.fetch(lat: lat, lon: lon)
-            .subscribe(with: self) { owner, result in
-                // 가장 최근의 값 가져 오기 위해
+            .subscribe(with: self, onSuccess: { owner, result in
                 owner.makeWeekendViewData(result.list)
-                let filteredData = result.list.filter { $0.dt >= Date().timeIntervalSince1970 }
                 
+                // 가장 최근의 값 가져 오기 위해
+                let filteredData = result.list.filter {
+                    $0.dt >= Date().timeIntervalSince1970
+                }
                 owner.makeHourlyViewData(filteredData, lat: lat, lon: lon)
-            }.disposed(by: disposeBag)
+                
+            }, onFailure: { owner, error in
+                owner.errorRelay.accept(())
+            }).disposed(by: disposeBag)
     }
     
+    // MARK: - private function
     private func makeHourlyViewData(_ items: [WeatherList], lat: Double, lon: Double) {
         LocationManager.reverseParsing(lat: lat, lon: lon) { [weak self] address in
+            guard let self else { return }
             var hourlyItems = items.map {
                 return HourlyViewData(
                     city: address,
@@ -95,11 +151,13 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
                     weatherSatus: $0.weather[0].description,
                     humidity: $0.main.humidity,
                     clouds: $0.clouds.all,
-                    wind: $0.wind.speed
+                    wind: $0.wind.speed,
+                    weather: $0.weather[0].main
                 )
             }
             hourlyItems.removeSubrange(24...hourlyItems.count - 1)
-            self?.hourlyListRelay.accept(hourlyItems)
+            self.hourlItems = hourlyItems
+            self.hourlyReadyRelay.accept(())
         }
     }
     
@@ -123,9 +181,9 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
                 }
             }
         }
-        let weeklyItems = minDictonary.sorted(by: { $0.key < $1.key }).map { return $1 }
-        
-        weeklyListRelay.accept(weeklyItems)
-        
+        let weeklyItems = minDictonary.sorted(by: { $0.key < $1.key })
+            .map { return $1 }
+        self.weeklyItems = weeklyItems
+        weeklyReadyRelay.accept(())
     }
 }

@@ -82,8 +82,8 @@ class HeaderView: BaseView {
         super.initConstraints()
         
         cityLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(16)
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
         }
         
@@ -100,6 +100,7 @@ class HeaderView: BaseView {
         tempStackView.snp.makeConstraints { make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(16)
             make.centerX.equalTo(cityLabel)
+            make.bottom.equalToSuperview().inset(16)
         }
     }
     

@@ -10,6 +10,7 @@ import Foundation
 enum WeatherInfoType: Int {
     static let numberOfSection = 4
     
+    case recent
     case hourly
     case weekend
     case location
@@ -20,5 +21,18 @@ enum WeatherInfoType: Int {
         
         self = type
     }
-    
+    var sectionHeight: CGFloat {
+        switch self {
+        case .recent:
+            return 300
+        case .hourly:
+            return 100
+        case .weekend:
+            return 56
+        case .location:
+            return 300
+        case .detail:
+            return 350
+        }
+    }
 }

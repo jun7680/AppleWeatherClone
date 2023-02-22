@@ -54,12 +54,16 @@ class SearchViewController: BaseViewController {
         super.bind()
         
         viewModel.outputs.countryListObservable
-            .debug()
             .bind(to: searchListTableView.rx.items(
                 cellIdentifier: SearchListTableViewCell.identifier,
                 cellType: SearchListTableViewCell.self)
             ) { index, item, cell in
                 cell.configure(item)
+            }.disposed(by: disposeBag)
+        
+        viewModel.outputs.errorObservable
+            .bind(with: self) { owner, _ in
+                owner.errorPresent()
             }.disposed(by: disposeBag)
     }
     

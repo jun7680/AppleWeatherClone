@@ -10,7 +10,11 @@ import UIKit
 class HourlyTableViewCell: BaseTableViewCell {
     static let identifier = "HourWeather"
     
-    private var hourlyItems = [HourlyViewData]()
+    var hourlyItems = [HourlyViewData]() {
+        didSet {
+            hourlyCollectionView.reloadData()
+        }
+    }
     
     private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
       let layout = UICollectionViewFlowLayout()
@@ -65,6 +69,22 @@ class HourlyTableViewCell: BaseTableViewCell {
     func configure(_ items: [HourlyViewData]) {
         hourlyItems = items
         hourlyCollectionView.reloadData()
+    }
+}
+
+extension HourlyTableViewCell {
+    static func makeCell(
+        view: UITableView,
+        indexPath: IndexPath,
+        model: [HourlyViewData]
+    ) -> HourlyTableViewCell {
+        guard let cell = view.dequeueReusableCell(
+            withIdentifier: identifier
+        ) as? HourlyTableViewCell else { return .init() }
+        
+        cell.hourlyItems = model
+        
+        return cell
     }
 }
 
