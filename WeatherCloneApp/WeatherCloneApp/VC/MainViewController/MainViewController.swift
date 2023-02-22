@@ -77,11 +77,10 @@ class MainViewController: BaseViewController {
                 owner.weeklyItems = items
             }.disposed(by: disposeBag)
         
-        viewModel.outputs.buildFinishObservable
+        viewModel.outputs.errorObservable
             .bind(with: self) { owner, _ in
-                owner.weatherListTableView.reloadData()
-            }
-            .disposed(by: disposeBag)
+                owner.errorPresent()
+            }.disposed(by: disposeBag)
     }
     
     override func subscribeUI() {

@@ -17,6 +17,7 @@ protocol MainViewModelInput {
     var weeklyListRelay: PublishRelay<[WeekendViewData]> { get }
     var buildFinishRelay: PublishRelay<Void> { get }
     var coordinateInput: (lat: Double, lon: Double) { get set }
+    var errorRelay: PublishRelay<Void> { get }
 }
 
 protocol MainViewModelOuput {
@@ -26,6 +27,7 @@ protocol MainViewModelOuput {
     var buildFinishObservable: Observable<Void> { get }
     
     var coordinate: (lat: Double, lon: Double) { get }
+    var errorObservable: Observable<Void> { get }
 }
 
 class MainViewModel: MainViewModelInput, MainViewModelOuput {
@@ -38,6 +40,10 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
     var infoListRelay = PublishRelay<[WeatherInfoType]>()
     var infoListRelayObservable: Observable<[WeatherInfoType]> {
         return infoListRelay.asObservable()
+    /// Error Relay
+    var errorRelay = PublishRelay<Void>()
+    var errorObservable: Observable<Void> {
+        return errorRelay.asObservable()
     }
     
     var hourlyListRelay = PublishRelay<[HourlyViewData]>()
@@ -73,13 +79,18 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
         coordinateInput = (lat, lon)
         
         WeatherService.fetch(lat: lat, lon: lon)
-            .subscribe(with: self) { owner, result in
-                // 가장 최근의 값 가져 오기 위해
+            .subscribe(with: self, onSuccess: { owner, result in
                 owner.makeWeekendViewData(result.list)
-                let filteredData = result.list.filter { $0.dt >= Date().timeIntervalSince1970 }
                 
+                // 가장 최근의 값 가져 오기 위해
+                let filteredData = result.list.filter {
+                    $0.dt >= Date().timeIntervalSince1970
+                }
                 owner.makeHourlyViewData(filteredData, lat: lat, lon: lon)
-            }.disposed(by: disposeBag)
+                
+            }, onFailure: { owner, error in
+                owner.errorRelay.accept(())
+            }).disposed(by: disposeBag)
     }
     
     private func makeHourlyViewData(_ items: [WeatherList], lat: Double, lon: Double) {
