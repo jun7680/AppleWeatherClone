@@ -13,12 +13,13 @@ class CurrentMapView: BaseView {
     private let mapView: MKMapView = {
         let mapview = MKMapView()
         mapview.isScrollEnabled = false
-        
+        mapview.layer.cornerRadius = 16
         return mapview
     }()
     
     override func setup() {
         super.setup()
+        
     }
     
     override func addViews() {
