@@ -60,11 +60,6 @@ class SearchViewController: BaseViewController {
             ) { index, item, cell in
                 cell.configure(item)
             }.disposed(by: disposeBag)
-        
-        viewModel.outputs.errorObservable
-            .bind(with: self) { owner, _ in
-                owner.errorPresent()
-            }.disposed(by: disposeBag)
     }
     
     override func subscribeUI() {
