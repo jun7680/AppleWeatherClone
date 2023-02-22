@@ -11,6 +11,7 @@ import Alamofire
 
 protocol WeatherServiceType {
     static func fetch(lat: Double, lon: Double) -> Single<WeatherResponse>
+    static func readCityList() -> Single<[CityListResponse]>
 }
 
 class WeatherService: WeatherServiceType {
@@ -19,5 +20,19 @@ class WeatherService: WeatherServiceType {
         let type = WeatherAPI.fetch(lat: lat, lon: lon)
     
         return SessionManager.request(WeatherResponse.self, apiType: type)
+    }
+    
+    static func readCityList() -> Single<[CityListResponse]> {
+        Single<[CityListResponse]>.create { single in
+            let data = Bundle.main.citiList
+            
+            do {
+                let model = try JSONDecoder().decode([CityListResponse].self, from: data)
+                single(.success(model))
+            } catch {
+                single(.failure(error))
+            }
+            return Disposables.create {}
+        }
     }
 }
