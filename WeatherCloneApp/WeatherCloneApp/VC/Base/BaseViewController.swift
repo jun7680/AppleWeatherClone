@@ -27,6 +27,7 @@ class BaseViewController: UIViewController {
     }
     
     func setup() {
+        view.backgroundColor = .white
         view.addSubview(searchBar)
     }
     

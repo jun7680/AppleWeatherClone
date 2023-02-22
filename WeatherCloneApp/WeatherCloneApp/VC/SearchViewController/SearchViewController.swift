@@ -28,14 +28,14 @@ class SearchViewController: BaseViewController {
             forCellReuseIdentifier: SearchListTableViewCell.identifier
         )
         
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = .lightGray
         
         return tableView
     }()
     
     override func setup() {
         super.setup()
-        view.backgroundColor = .cyan.withAlphaComponent(0.5)
+        view.backgroundColor = .lightGray
         view.addSubview(searchListTableView)
 
     }

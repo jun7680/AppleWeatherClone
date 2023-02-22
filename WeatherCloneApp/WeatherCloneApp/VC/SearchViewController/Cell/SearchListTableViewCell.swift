@@ -30,7 +30,7 @@ class SearchListTableViewCell: BaseTableViewCell {
         super.setup()
         
         selectionStyle = .default
-        contentView.backgroundColor = .cyan.withAlphaComponent(0.5)
+        contentView.backgroundColor = .lightGray
     }
     
     override func addViews() {
