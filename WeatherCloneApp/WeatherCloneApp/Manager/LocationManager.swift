@@ -18,10 +18,11 @@ class LocationManager {
             location,
             preferredLocale: locale
         ) { place, error in
-            
-            guard let place, let local = place[0].locality else { return }
-            
-            completion(local)
+            if let place, let local = place[0].locality {
+                completion(local)
+            } else {
+                completion(place?[0].country ?? "")
+            }
         }
     }
 }

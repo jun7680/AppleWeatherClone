@@ -54,7 +54,6 @@ class SearchViewController: BaseViewController {
         super.bind()
         
         viewModel.outputs.countryListObservable
-            .debug()
             .bind(to: searchListTableView.rx.items(
                 cellIdentifier: SearchListTableViewCell.identifier,
                 cellType: SearchListTableViewCell.self)
