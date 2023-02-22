@@ -16,15 +16,22 @@ struct HeaderViewData {
 }
 
 struct HourlyViewData {
+    let city: String
     let date: String
     let icon: String
     let temp: Double
+    let minTemp: Double
+    let maxTemp: Double
+    let weatherSatus: String
+    let humidity: Int
+    let clouds: Int
+    let wind: Double
 }
 
 struct WeekendViewData {
     let weekend: String
     let icon: String
-    let temp: (min: Double, max: Double)
+    var temp: (min: Double, max: Double)
 }
 
 struct DetailViewData {

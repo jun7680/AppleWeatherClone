@@ -351,6 +351,7 @@
 			children = (
 				66E6AEAB29A4692C00B094C0 /* BaseCollectionViewCell.swift */,
 				6672380C29A4BF0C00531CF5 /* BaseView.swift */,
+				6672382A29A5F44400531CF5 /* BaseViewController.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -359,6 +360,7 @@
 			isa = PBXGroup;
 			children = (
 				66E6AEB029A46D2000B094C0 /* MainViewModel.swift */,
+				6672383129A5FB3E00531CF5 /* SearchViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -513,9 +515,13 @@
 				6672381129A4C56B00531CF5 /* DetailInfoCollectionViewCell.swift in Sources */,
 				667237EB29A4737B00531CF5 /* WeatherInfoType.swift in Sources */,
 				6672380929A4B53400531CF5 /* WeekEndTableViewCell.swift in Sources */,
+				6672382B29A5F44400531CF5 /* BaseViewController.swift in Sources */,
+				6672383229A5FB3E00531CF5 /* SearchViewModel.swift in Sources */,
 				667237E929A46FA300531CF5 /* WeatherViewDatas.swift in Sources */,
 				66E6AE9F29A450D100B094C0 /* BundelExtension.swift in Sources */,
 				6672380F29A4C55900531CF5 /* DetailInfoTableViewCell.swift in Sources */,
+				6672382E29A5F97500531CF5 /* SearchListTableViewCell.swift in Sources */,
+				6672382729A5F32A00531CF5 /* SearchViewController.swift in Sources */,
 				66E6AE9729A44E3D00B094C0 /* APIType.swift in Sources */,
 				668957E129A4418C000ADA91 /* MainViewController.swift in Sources */,
 				668957DD29A4418C000ADA91 /* AppDelegate.swift in Sources */,
