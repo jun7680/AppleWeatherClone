@@ -9,17 +9,13 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class MainViewController: UIViewController {
+class MainViewController: BaseViewController {
+    
     private let disposeBag = DisposeBag()
     private let viewModel = MainViewModel()
     
-    private let searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Search"
-        searchBar.searchBarStyle = .minimal
-        
-        return searchBar
-    }()
+    private var hourlyItems = [HourlyViewData]()
+    private var weeklyItems = [WeekendViewData]()
     
     private let weatherListTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -41,17 +37,10 @@ class MainViewController: UIViewController {
         return tableView
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
+    override func setup() {
+        super.setup()
         
-        setupView()
-        initConstraints()
-    }
-    
-    private func setupView() {
         let views = [
-            searchBar,
             weatherListTableView
         ]
         view.addSubViews(views)
@@ -64,12 +53,9 @@ class MainViewController: UIViewController {
         
     }
     
-    private func initConstraints() {
-        searchBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
+    override func initConstraints() {
+        super.initConstraints()
+
         weatherListTableView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview()
@@ -78,7 +64,36 @@ class MainViewController: UIViewController {
         
     }
     
-    private func bind() {
+    override func bind() {
+        super.bind()
+        
+        viewModel.outputs.hourlyListObservable
+            .bind(with: self) { owner, items in
+                owner.hourlyItems = items
+            }.disposed(by: disposeBag)
+        
+        viewModel.outputs.weeklyListObservable
+            .bind(with: self) { owner, items in
+                owner.weeklyItems = items
+            }.disposed(by: disposeBag)
+        
+        viewModel.outputs.buildFinishObservable
+            .bind(with: self) { owner, _ in
+                owner.weatherListTableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    override func subscribeUI() {
+        super.subscribeUI()
+        
+        searchBar.rx.textDidBeginEditing
+            .bind(with: self) { owner, _ in
+                let searchViewController = SearchViewController()
+                searchViewController.selectDelegate = self
+                searchViewController.modalPresentationStyle = .fullScreen
+                owner.present(searchViewController, animated: true)
+            }.disposed(by: disposeBag)
     }
 }
 
@@ -92,7 +107,7 @@ extension MainViewController: UITableViewDataSource {
         
         switch section {
         case .hourly: return 1
-        case .weekend: return 5
+        case .weekend: return weeklyItems.count
         case .location: return 1
         case .detail: return 1
         }
@@ -110,33 +125,14 @@ extension MainViewController: UITableViewDataSource {
                 for: indexPath
             ) as? HourlyTableViewCell else { return .init() }
             
-            let mockData: [HourlyViewData] = [
-                .init(date: "월", icon: "01d", temp: 10),
-                .init(date: "화", icon: "02d", temp: 15),
-                .init(date: "수", icon: "03d", temp: -10),
-                .init(date: "목", icon: "04d", temp: 10),
-                .init(date: "금", icon: "09d", temp: -12),
-                .init(date: "토", icon: "03d", temp: 10),
-                .init(date: "월", icon: "03d", temp: 10),
-                .init(date: "월", icon: "03d", temp: 10),
-                .init(date: "월", icon: "03d", temp: 10),
-                .init(date: "월", icon: "03d", temp: 10)
-            ]
-            cell.configure(mockData)
+            cell.configure(hourlyItems)
             
             return cell
             
         case .weekend:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: WeekEndTableViewCell.identifier, for: indexPath) as? WeekEndTableViewCell else { return .init() }
-            cell.configure(.init(weekend: "월", icon: "01d", temp: (12, 47)))
-            
-//            if indexPath.row == 0 {
-//                cell.roundCorners(corners: [.topLeft, .topRight], radius: 16)
-//            } else if indexPath.row == 4 {
-//                cell.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 16)
-//            } else {
-//                cell.layer.cornerRadius = 0
-//            }
+            let weekend = weeklyItems[indexPath.row]
+            cell.configure(weekend)
             return cell
             
         case .detail:
@@ -144,12 +140,14 @@ extension MainViewController: UITableViewDataSource {
                 withIdentifier: DetailInfoTableViewCell.identifier,
                 for: indexPath
             ) as? DetailInfoTableViewCell else { return .init() }
-            let items: [DetailDataType] = [
-                .clouds(value: 56),
-                .wind(value: 56),
-                .humidity(value: 56)
-            ]
-            cell.configure(items)
+            if let recentItem = hourlyItems.first {
+                let items: [DetailDataType] = [
+                    .clouds(value: recentItem.clouds),
+                    .wind(value: recentItem.wind),
+                    .humidity(value: recentItem.humidity)
+                ]
+                cell.configure(items)
+            }
             return cell
             
         default: return .init()
@@ -161,13 +159,18 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let headerview = HeaderView()
-            headerview.configure(.init(city: "서울", temp: 17, minTemp: -4, maxTemp: 14, weatherSatus: "맑음"))
+            guard let recentItem = hourlyItems.first else { return nil }
+        
+            headerview.configure(recentItem)
             return headerview
         }
         
         if section == 3 {
             let mapView = CurrentMapView()
-            mapView.setLocation()
+            mapView.setLocation(
+                lat: viewModel.outputs.coordinate.lat,
+                lon: viewModel.outputs.coordinate.lon
+            )
             return mapView
         }
         return nil
@@ -192,5 +195,11 @@ extension MainViewController: UITableViewDelegate {
         case .detail: return 380
         default: return CGFloat.leastNormalMagnitude
         }
+    }
+}
+
+extension MainViewController: SelectedCountry {
+    func selectedCountry(model: CityListResponse) {
+        viewModel.input.fetch(lat: model.coord.lat, lon: model.coord.lon)
     }
 }

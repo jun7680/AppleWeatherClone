@@ -87,6 +87,6 @@ extension HourlyTableViewCell: UICollectionViewDataSource {
 
 extension HourlyTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 44, height: 100)
+        return CGSize(width: 60, height: 100)
     }
 }

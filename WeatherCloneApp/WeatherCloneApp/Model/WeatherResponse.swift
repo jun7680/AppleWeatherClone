@@ -80,3 +80,13 @@ struct Rain: Codable {
         case threeHours = "3h"
     }
 }
+
+extension WeatherList {
+    var dtToDate: String {
+        return dt.convertingUTCtime.dtToDate
+    }
+    
+    var dayOfWeek: String {
+        return dt.convertingUTCtime.dayOfWeek
+    }
+}

@@ -41,11 +41,9 @@ class SessionManager: Request {
                         
                         single(.success(model))
                     } catch {
-                        print(error)
                         single(.failure(NetworkError.decodingError))
                     }
                 case .failure(let error):
-                    print(error)
                     single(.failure(error))
                 }
             }

@@ -42,14 +42,14 @@ class HeaderView: BaseView {
     private let minTempLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 25)
+        label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let maxTempLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 25)
+        label.font = .systemFont(ofSize: 20)
         return label
     }()
     
@@ -103,11 +103,11 @@ class HeaderView: BaseView {
         }
     }
     
-    func configure(_ item: HeaderViewData) {
+    func configure(_ item: HourlyViewData) {
         cityLabel.text = item.city
         temperatureLabel.text = "\(item.temp)º"
         descriptionLabel.text = item.weatherSatus
-        minTempLabel.text = "\(item.minTemp)º | "
-        maxTempLabel.text = "\(item.maxTemp)º"
+        minTempLabel.text = "최저: \(item.minTemp)º | "
+        maxTempLabel.text = "최고: \(item.maxTemp)º"
     }
 }
