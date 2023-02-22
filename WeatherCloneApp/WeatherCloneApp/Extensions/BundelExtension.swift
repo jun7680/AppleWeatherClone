@@ -18,4 +18,12 @@ extension Bundle {
         
         return appId
     }
+    
+    var citiList: Data {
+        guard let path = self.url(forResource: "citylist", withExtension: "json"),
+              let data = try? Data(contentsOf: path)
+        else { return Data() }
+        
+        return data
+    }
 }
