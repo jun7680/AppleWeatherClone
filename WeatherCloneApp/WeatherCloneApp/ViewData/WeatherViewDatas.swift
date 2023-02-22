@@ -26,6 +26,7 @@ struct HourlyViewData {
     let humidity: Int
     let clouds: Int
     let wind: Double
+    let weather: WeatherStatus
 }
 
 struct WeekendViewData {

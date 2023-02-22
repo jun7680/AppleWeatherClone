@@ -58,7 +58,7 @@ struct Main: Codable {
 
 struct Weather: Codable {
     let id: Int
-    let main: String
+    let main: WeatherStatus
     let description: String
     let icon: String
 }
@@ -88,5 +88,22 @@ extension WeatherList {
     
     var dayOfWeek: String {
         return dt.convertingUTCtime.dayOfWeek
+    }
+}
+
+
+enum WeatherStatus: String, Codable {
+    case clouds = "Clouds"
+    case snow = "Snow"
+    case rain = "Rain"
+    case sunny = "Clear"
+    
+    var icon: String {
+        switch self {
+        case .clouds: return "clouds"
+        case .snow: return "fog"
+        case .rain: return "rain"
+        case .sunny: return "sunny"
+        }
     }
 }

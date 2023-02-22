@@ -10,6 +10,13 @@ import UIKit
 class WeekEndTableViewCell: BaseTableViewCell {
     static let identifier = "WeekEnd"
     
+    private var weekendData: WeekendViewData? {
+        didSet {
+            guard let weekendData else { return }
+            update(weekendData)
+        }
+    }
+    
     private let weekendLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -100,4 +107,27 @@ class WeekEndTableViewCell: BaseTableViewCell {
         weekendMaxLabel.text = "최대: \(item.temp.max)º"
     }
     
+    func update(_ item: WeekendViewData) {
+        weekendLabel.text = item.weekend
+        weekendIcon.image = UIImage(named: item.icon)
+        weekendMinLabel.text = "최소: \(item.temp.min)º"
+        weekendMaxLabel.text = "최대: \(item.temp.max)º"
+    }
+    
+}
+
+extension WeekEndTableViewCell {
+    static func makeCell(
+        view: UITableView,
+        indexPath: IndexPath,
+        model: WeekendViewData
+    ) -> WeekEndTableViewCell {
+        guard let cell = view.dequeueReusableCell(
+            withIdentifier: identifier
+        ) as? WeekEndTableViewCell else { return .init() }
+        
+        cell.weekendData = model
+        
+        return cell
+    }
 }
