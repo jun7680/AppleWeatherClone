@@ -76,6 +76,7 @@ class MainViewController: BaseViewController {
             }.disposed(by: disposeBag)
     }
     
+    /// delegate setting
     private func setTableViewDelegate() {
         weatherListTableView.rx
             .setDelegate(self)
@@ -83,6 +84,7 @@ class MainViewController: BaseViewController {
         
     }
     
+    /// cell register
     private func setRegisterCell() {
         weatherListTableView.register(
             RecentInfoTableViewCell.self,
@@ -166,12 +168,15 @@ extension MainViewController {
 
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let section = WeatherInfoType(index: indexPath.section) else { return 0 }
+        guard let section = WeatherInfoType(
+            index: indexPath.section
+        ) else { return 0 }
 
         return section.sectionHeight
     }
 }
 
+/// Delegate with SearchViewController action
 extension MainViewController: SelectedCountry {
     func selectedCountry(model: CityListResponse) {
         viewModel.input.fetch(lat: model.coord.lat, lon: model.coord.lon)

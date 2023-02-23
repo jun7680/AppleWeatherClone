@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Location Section
 struct LocationViewData {
     let lat: Double
     let lon: Double
