@@ -94,6 +94,7 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
         return WeatherSectionModel(items: [.detail(model)])
     }
     
+    /// DataSource All Seection
     private var weatherSections: [WeatherSectionModel] {
         return [
             recentSection,
@@ -110,14 +111,7 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
         fetch(lat: coordinate.lat, lon: coordinate.lon)
     }
     
-    // MARK: - bindFinishRelay
-    private func bindFinishRelay() {
-        Observable.zip(weeklyReadyRelay, hourlyReadyRelay)
-            .bind(with: self) { owner, _ in
-                owner.sections.accept(owner.weatherSections)
-            }.disposed(by: disposeBag)
-    }
-    
+    /// MARK: - fetch weather info
     func fetch(lat: Double, lon: Double) {
         coordinate = (lat, lon)
         
@@ -135,8 +129,20 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
                 owner.errorRelay.accept(())
             }).disposed(by: disposeBag)
     }
+}
+
+// MARK: - private function
+extension MainViewModel {
     
-    // MARK: - private function
+    /// bindFinishRelay
+    private func bindFinishRelay() {
+        Observable.zip(weeklyReadyRelay, hourlyReadyRelay)
+            .bind(with: self) { owner, _ in
+                owner.sections.accept(owner.weatherSections)
+            }.disposed(by: disposeBag)
+    }
+    
+    /// hourlyViewData build
     private func makeHourlyViewData(_ items: [WeatherList], lat: Double, lon: Double) {
         LocationManager.reverseParsing(lat: lat, lon: lon) { [weak self] address in
             guard let self else { return }
@@ -161,8 +167,10 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
         }
     }
     
+    /// weekendViewData Build
     private func makeWeekendViewData(_ items: [WeatherList]) {
         var minDictonary: [String: WeekendViewData] = [:]
+        // 최고, 최저 온도 구하기 위한 로직
         items.forEach {
             if minDictonary[$0.dtToDate] == nil {
                 let data = WeekendViewData(
@@ -186,4 +194,5 @@ class MainViewModel: MainViewModelInput, MainViewModelOuput {
         self.weeklyItems = weeklyItems
         weeklyReadyRelay.accept(())
     }
+    
 }

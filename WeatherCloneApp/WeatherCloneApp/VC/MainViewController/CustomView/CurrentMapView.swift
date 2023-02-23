@@ -19,7 +19,6 @@ class CurrentMapView: BaseView {
     
     override func setup() {
         super.setup()
-        
     }
     
     override func addViews() {
