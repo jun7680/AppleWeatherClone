@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// RecentSection
 struct HeaderViewData {
     let city: String
     let temp: Double
@@ -15,6 +16,7 @@ struct HeaderViewData {
     let weatherSatus: String
 }
 
+/// HourlySection
 struct HourlyViewData {
     let city: String
     let date: String
@@ -29,18 +31,14 @@ struct HourlyViewData {
     let weather: WeatherStatus
 }
 
+/// Weekend Section
 struct WeekendViewData {
     let weekend: String
     let icon: String
     var temp: (min: Double, max: Double)
 }
 
-struct DetailViewData {
-//    let humidity: Int
-//    let clouds: Int
-//    let wind: Double
-}
-
+/// Detail Section
 enum DetailDataType {
     case humidity(value: Int)
     case clouds(value: Int)

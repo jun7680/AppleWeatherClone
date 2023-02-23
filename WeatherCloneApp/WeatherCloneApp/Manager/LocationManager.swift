@@ -8,6 +8,7 @@
 import Foundation
 import CoreLocation
 
+/// Location Manager
 class LocationManager {
     static func reverseParsing(lat: Double, lon: Double, completion: @escaping (String) -> Void) {
         let location = CLLocation(latitude: lat, longitude: lon)

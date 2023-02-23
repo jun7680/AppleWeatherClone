@@ -14,6 +14,8 @@ extension Double {
 }
 
 extension Date {
+    
+    /// Time Format : "a h시" ex:) 오후 9시
     var dtToTimeWithLetter: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "a h시"
@@ -21,13 +23,14 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    /// format: yyyy-MM-dd
+    /// Time Format: yyyy-MM-dd
     var dtToDate: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.locale = Locale(identifier: "ko-kr")
         return dateFormatter.string(from: self)
     }
+    /// Time Format: EEEEE -> 목
     var dayOfWeek: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEEEE"

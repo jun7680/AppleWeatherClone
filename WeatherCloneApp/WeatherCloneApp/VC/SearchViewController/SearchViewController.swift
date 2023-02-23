@@ -64,12 +64,7 @@ class SearchViewController: BaseViewController {
     
     override func subscribeUI() {
         super.subscribeUI()
-        
-        searchBar.rx.textDidBeginEditing
-            .bind(with: self) { owner, _ in
-                owner.viewModel.inputs.fetch()
-            }.disposed(by: disposeBag)
-        
+
         searchListTableView.rx.modelSelected(CityListResponse.self)
             .bind(with: self) { owner, model in
                 owner.dismiss(animated: true) {

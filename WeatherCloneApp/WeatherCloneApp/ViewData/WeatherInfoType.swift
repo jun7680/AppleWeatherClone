@@ -8,7 +8,6 @@
 import Foundation
 
 enum WeatherInfoType: Int {
-    static let numberOfSection = 4
     
     case recent
     case hourly
@@ -21,6 +20,7 @@ enum WeatherInfoType: Int {
         
         self = type
     }
+    
     var sectionHeight: CGFloat {
         switch self {
         case .recent:

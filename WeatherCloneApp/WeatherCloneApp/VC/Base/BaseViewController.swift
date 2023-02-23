@@ -38,19 +38,23 @@ class BaseViewController: UIViewController {
         subscribeUI()
     }
     
+    /// setup view ex:) addview, backgroudcolor etc..
     func setup() {
         view.backgroundColor = .white
         view.addSubview(searchBar)
     }
-    
+    /// init Constraints
     func initConstraints() {
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview().inset(16)
         }
     }
+    /// Binding with data
     func bind() {}
+    /// Subscribie to UI Interaction
     func subscribeUI() {}
+    /// Error Alert present
     func errorPresent() {
         present(alert, animated: true)
     }
